@@ -197,6 +197,7 @@ class PriorityQueue:
         for index, (p, c, i) in enumerate(self.heap):
             if i == item:
                 if p <= priority:
+                    return False
                     break
                 del self.heap[index]
                 self.heap.append((priority, c, item))
@@ -204,6 +205,7 @@ class PriorityQueue:
                 break
         else:
             self.push(item, priority)
+        return True # we update this item
 
 class PriorityQueueWithFunction(PriorityQueue):
     """
