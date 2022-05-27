@@ -118,16 +118,38 @@ def depthFirstSearch(problem: SearchProblem):
     print(actions)
     return actions
 
-
-
-
-
-
-
 def breadthFirstSearch(problem: SearchProblem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    actions = []
+    stateQueue = util.Queue()
+    reachedState = set()
+    startState = problem.getStartState()
+    stateQueue.push(startState)
+    parentDict = {}
+    goalState = None
+    while stateQueue.isEmpty() == False:
+        nowState = stateQueue.pop()
+        if problem.isGoalState(nowState):
+            goalState = nowState
+            break
+        successors = problem.getSuccessors(nowState)
+        for successor in successors:
+            nextState, action, cost = successor
+            if nextState in reachedState:
+                continue
+            stateQueue.push(nextState)
+            parentDict[nextState] = (nowState, action)
+            reachedState.add(nextState)
+    if goalState == None:
+        return actions
+    prevState = goalState
+    while prevState != startState:
+        prevState, prevAction = parentDict[prevState]
+        actions.insert(0, prevAction)
+    return actions
+
+
 
 def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
