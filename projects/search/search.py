@@ -92,12 +92,12 @@ def depthFirstSearch(problem: SearchProblem):
     reachedState = set()
     startState = problem.getStartState()
     stateStack.push(startState)
-    reachedState.add(startState)
     parentDict = {}
     goalState = None
     while stateStack.isEmpty() == False:
         nowState = stateStack.pop()
         print(nowState)
+        reachedState.add(nowState)
         if problem.isGoalState(nowState):
             goalState = nowState
             break
@@ -108,7 +108,6 @@ def depthFirstSearch(problem: SearchProblem):
                 continue
             stateStack.push(nextState)
             parentDict[nextState] = (nowState, action) #use dict to record path from start state to now state.
-            reachedState.add(nextState)
     if goalState == None:
         return actions
     prevState = goalState
