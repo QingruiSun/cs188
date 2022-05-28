@@ -158,9 +158,9 @@ def uniformCostSearch(problem: SearchProblem):
     startState = problem.getStartState()
     parentDict = {}
     goalState = None
-    stateQueue.push(startState, 0)
+    stateQueue.push((startState, 0), 0)
     while stateQueue.isEmpty() == False:
-        nowState = stateQueue.pop()
+        nowState, nowCost = stateQueue.pop()
         reachedState.add(nowState)
         if problem.isGoalState(nowState):
             goalState = nowState
@@ -170,7 +170,7 @@ def uniformCostSearch(problem: SearchProblem):
             nextState, action, cost = successor
             if nextState in reachedState:
                 continue
-            is_updated = stateQueue.update(nextState, cost)
+            is_updated = stateQueue.update((nextState, nowCost + cost), nowCost + cost)
             if is_updated:
                 parentDict[nextState] = (nowState, action)
     if goalState == None:
@@ -199,9 +199,9 @@ def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
     reachedState = set()
     parentDict = {}
     goalState = None
-    stateQueue.push((startState, None, None), 0)
+    stateQueue.push((startState, None, None, 0), 0)
     while stateQueue.isEmpty() == False:
-        nowState, prevAction, prevState = stateQueue.pop()
+        nowState, prevAction, prevState, prevCost = stateQueue.pop()
         reachedState.add(nowState)
         parentDict[nowState] = (prevState, prevAction)
         if problem.isGoalState(nowState):
@@ -212,8 +212,8 @@ def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
             nextState, action, cost = successor
             if nextState in reachedState:
                 continue
-            totalCost = cost + heuristic(nextState, problem)
-            stateQueue.update((nextState, action, nowState), totalCost)
+            totalCost = cost + heuristic(nextState, problem) + prevCost
+            stateQueue.update((nextState, action, nowState, prevCost + cost), totalCost)
     if goalState == None:
         return actions
     prevState = goalState
